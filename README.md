@@ -1,98 +1,80 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Jira Watcher Bot
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Telegram bot for Jira project monitoring — track issue changes and get instant notifications with team reports, built with NestJS and PostgreSQL.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=flat&logo=nestjs&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
+![Telegram](https://img.shields.io/badge/Telegram-26A5E4?style=flat&logo=telegram&logoColor=white)
+![Jira](https://img.shields.io/badge/Jira-0052CC?style=flat&logo=jira&logoColor=white)
 
-## Description
+## About
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Jira Watcher Bot is a full-stack integration service that connects Jira projects with Telegram group chats via webhook events. Add the bot to your team group, link your Jira project and get real-time notifications on issue status changes, assignee updates and task renames — built with NestJS and PostgreSQL.
 
-## Project setup
+## Features
 
-```bash
-$ npm install
-```
+- **Telegram bot** — registers users on `/start` and greets them by name
+- **Jira webhook** — receives and processes issue events in real time
+- **Change tracking** — detects status transitions, assignee changes and summary edits
+- **Group notifications** — sends formatted HTML messages to a Telegram group chat
+- **User storage** — saves Telegram users to PostgreSQL on first interaction
+- **Jira account linking** — optionally link Telegram user to a Jira account
+- **Team report** — show how many issues are in progress per group member
 
-## Compile and run the project
+## Pages / Flows
 
-```bash
-# development
-$ npm run start
+| Flow               | Description                                            |
+| ------------------ | ------------------------------------------------------ |
+| **/start command** | Bot registers user in DB and sends a personal greeting |
+| **Jira event**     | Webhook received → parsed → notification sent to group |
+| **Report command** | Bot replies with per-member in-progress issue count    |
 
-# watch mode
-$ npm run start:dev
+## API Endpoints
 
-# production mode
-$ npm run start:prod
-```
+| Method | Endpoint            | Description                    |
+| ------ | ------------------- | ------------------------------ |
+| `POST` | `/webhook/telegram` | Receive updates from Telegram  |
+| `POST` | `/webhook/jira`     | Receive issue events from Jira |
 
-## Run tests
+## Tech Stack
 
-```bash
-# unit tests
-$ npm run test
+| Technology | Purpose                   |
+| ---------- | ------------------------- |
+| NestJS     | Backend framework         |
+| TypeScript | Type safety               |
+| TypeORM    | Database ORM              |
+| PostgreSQL | User and event storage    |
+| Telegraf   | Telegram Bot API client   |
+| Axios      | HTTP requests to Jira API |
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Getting Started
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Install dependencies
+npm install
+
+# Configure environment
+cp .env.example .env
+
+# Start in development mode
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+```env
+TELEGRAM_BOT_TOKEN=your_bot_token_here
+TELEGRAM_GROUP_CHAT_ID=-100xxxxxxxxx
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASS=password
+DB_NAME=jira_bot
+```
 
-## Resources
+> Requires a public HTTPS domain for Telegram and Jira webhooks. If you don't have a server, use [ngrok](https://ngrok.com) for local development.
 
-Check out a few resources that may come in handy when working with NestJS:
+## Author
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Designed and developed by **Ihor Yanchuk**
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+[Portfolio](https://github.com/Vergos1) · [GitHub](https://github.com/Vergos1)
