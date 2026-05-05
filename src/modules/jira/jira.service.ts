@@ -46,7 +46,7 @@ export class JiraService {
       }
     }
 
-    const chatId = this.config.get<string>('chat_id') ?? '';
+    const chatId = this.config.get<string>('TELEGRAM_GROUP_CHAT_ID') ?? '';
     await this.telegramService.sendMessage(chatId, message);
   }
 }
