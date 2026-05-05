@@ -1,4 +1,5 @@
 import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import type { JiraWebhookPayload } from './dto/jira-webhook.dto';
 import { JiraService } from './jira.service';
 
 @Controller('webhook/jira')
@@ -9,16 +10,7 @@ export class JiraController {
   @HttpCode(200)
   async handleWebhook(
     @Body()
-    payload: {
-      webhookEvent: string;
-      issue: {
-        key: string;
-        fields: { summary: string; assignee: { displayName: string } };
-      };
-      changelog: {
-        items: { field: string; fromString: string; toString: string }[];
-      };
-    },
+    payload: JiraWebhookPayload,
   ) {
     await this.jiraService.processEvent(payload);
     return { ok: true };

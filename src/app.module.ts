@@ -2,11 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JiraModule } from './modules/jira/jira.module';
-import {
-  TelegramModule,
-  TelegramModule,
-} from './modules/telegram/telegram.module';
-import { User } from './modules/users/user.entity';
+import { TelegramModule } from './modules/telegram/telegram.module';
+import { User } from './modules/users/entities/user.entity';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({

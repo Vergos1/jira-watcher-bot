@@ -11,11 +11,10 @@ export class TelegramService implements OnModuleInit {
     private readonly config: ConfigService,
     private readonly usersService: UsersService,
   ) {
-    this.bot = new Telegraf(this.config.get('token') ?? '');
+    this.bot = new Telegraf(this.config.get<string>('TELEGRAM_BOT_TOKEN')!);
   }
 
   onModuleInit() {
-    // Обробка команди /start
     this.bot.command('start', async (ctx) => {
       const tgUser = ctx.from;
       const user = await this.usersService.findOrCreate(tgUser);
@@ -23,6 +22,8 @@ export class TelegramService implements OnModuleInit {
         `Привіт, ${user.firstName}! 👋 Я слідкуватиму за змінами у Jira.`,
       );
     });
+
+    void this.bot.launch();
   }
 
   async sendMessage(chatId: string | number, text: string) {

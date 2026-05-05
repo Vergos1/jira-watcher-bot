@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TelegramService } from '../telegram/telegram.service';
+import type { JiraWebhookPayload } from './dto/jira-webhook.dto';
 
 @Injectable()
 export class JiraService {
@@ -9,22 +10,9 @@ export class JiraService {
     private readonly telegramService: TelegramService,
   ) {}
 
-  async processEvent(payload: {
-    webhookEvent: string;
-    issue: {
-      key: string;
-      fields: {
-        summary: string;
-        assignee: { displayName: string };
-      };
-    };
-    changelog: {
-      items: { field: string; fromString: string; toString: string }[];
-    };
-  }) {
+  async processEvent(payload: JiraWebhookPayload) {
     const event = payload.webhookEvent;
 
-    // Обробляємо тільки зміни задач
     if (!['jira:issue_updated', 'jira:issue_created'].includes(event)) return;
 
     const issue = payload.issue;
@@ -38,7 +26,6 @@ export class JiraService {
     message += `📌 <b>Задача:</b> ${issueKey} — ${issueSummary}\n`;
     message += `👤 <b>Виконавець:</b> ${assignee}\n`;
 
-    // Парсимо зміни зі changelog
     if (changelog?.items?.length) {
       message += `\n📝 <b>Зміни:</b>\n`;
 
